@@ -3,7 +3,7 @@ package zona_fit.conexion;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class conexion {
+public class Conexion {
 
     public static Connection getConexion(){
         Connection conexion = null;
