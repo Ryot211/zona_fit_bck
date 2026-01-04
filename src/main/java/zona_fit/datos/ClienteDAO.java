@@ -130,7 +130,7 @@ public class ClienteDAO implements  IClienteDAO{
         Connection con = getConexion();
         var sql= "Delete from cliente where id= ?";
         try{ps = con.prepareStatement(sql);
-            ps.setInt(1, cliente.getId());
+            ps.setInt(1, cliente.getId());// es un parametro posicional
             ps.execute();
             return  true;
 
