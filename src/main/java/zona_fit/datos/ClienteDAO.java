@@ -88,7 +88,7 @@ public class ClienteDAO implements  IClienteDAO{
         finally{
 
                     try{
-                        con.close()
+                        con.close();
                     }catch(Exception e){
                         System.out.println("Error al cerrar conexcion "+e.getMessage());
                     }
@@ -99,6 +99,28 @@ public class ClienteDAO implements  IClienteDAO{
 
     @Override
     public boolean modificarCliente(Cliente cliente) {
+        PreparedStatement ps;
+        Connection con = getConexion();
+        var sql = "UPDATE cliente set nombre=?,apellido=?,membresia=? "+
+                "WHERE id = ?";
+        try{
+            ps = con.prepareStatement(sql);
+            ps.setString(1, cliente.getNombre());
+            ps.setString(2, cliente.getApellido());
+            ps.setInt(3, cliente.getMembresia());
+            ps.setInt(4, cliente.getId());
+            ps.execute();
+            return  true;
+        }catch(Exception e){
+            System.out.println("Error al modificar cliente: "+e.getMessage());
+        }finally {
+            try{
+                con.close();
+            }catch(Exception e){
+                System.out.println("Error al cerrar conexion "+e.getMessage());
+            }
+        }
+
         return false;
     }
 
@@ -115,13 +137,28 @@ public class ClienteDAO implements  IClienteDAO{
 //        var clientes = clienteDAO.listarClientes();
 //        clientes.forEach(System.out::println);
         // buscar cliente por id
-        var cliente1 = new Cliente(1);
-        System.out.println("Cliuente antes de la busqueda "+cliente1);
-        var encontrado = clienteDAO.buscarClientePorId(cliente1);
-        if(encontrado)
-            System.out.println("Cliente encontrado "+cliente1);
-        else
-            System.out.println("Cliente no encontrado "+cliente1.getId());
+//        var nuevoCliente = new Cliente("Romi","Arteaga",300);
+//        var agregado= clienteDAO.agregarCliente(nuevoCliente);
+//        if(agregado){
+//            System.out.println("Cliente agregado "+nuevoCliente);
+//        }else{
+//            System.out.println("Error al agregar cliente "+nuevoCliente);
+//        }
+        // modificar cliente
+        var modificarCliente  = new Cliente(4,"Carmen","AS",300);
+        var modificado = clienteDAO.modificarCliente(modificarCliente);
+        if(modificado){
+            System.out.println("Cliente modificado");
+        }else{
+            System.out.println("Cliente modificado nulo");
+        }
+
+        // Listar Clientes
+        System.out.println("Listar Clientes");
+        var clientes = clienteDAO.listarClientes();
+        clientes.forEach(System.out::println);
+//
+
     }
 }
 ///pr
